@@ -1,0 +1,27 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
+    "isolatedModules": false,
+    "lib": ["ES2017", "ES2018.AsyncIterable", "DOM", "DOM.Iterable"],
+    "module": "ESNEXT",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "./dist/main",
+    "paths": {
+      "*": ["./reference/*", "./node_modules/@types/*", "./node_modules/*"]
+    },
+    "rootDir": "./src/main",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2017",
+    "typeRoots": ["./reference", "./node_modules/@types"],
+    "types": ["svelte"]
+  },
+  "include": ["./src/main/**/*.ts"],
+  "exclude": ["node_modules", "./src/main/**/*.spec.ts"]
+}

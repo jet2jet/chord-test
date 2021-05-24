@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "types": ["svelte", "jest"]
+  },
+  "include": ["./src/main/**/*.ts"],
+  "exclude": ["node_modules"]
+}

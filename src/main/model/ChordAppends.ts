@@ -1,0 +1,21 @@
+const enum ChordAppends {
+	None = 0,
+	Seventh,
+	Major7,
+	_Level1,
+	Sixth = _Level1,
+	Ninth,
+	Add9,
+	_Level2,
+	Flat5 = _Level2,
+	Sharp5,
+	Flat9,
+	_Level3,
+	Sharp9 = _Level3,
+	Eleventh,
+	Sharp11,
+	Thirteenth,
+	Flat13,
+	_Level4,
+}
+export default ChordAppends;

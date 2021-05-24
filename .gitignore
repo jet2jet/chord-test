@@ -1,0 +1,9 @@
+/.vs/
+/.work/
+/coverage/
+/dist/
+/node_modules/
+.github
+.jest_cache
+npm-debug.log
+yarn-error.log

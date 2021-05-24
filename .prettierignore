@@ -1,0 +1,8 @@
+.jest_cache/
+.work/
+.vs/
+coverage/
+dist/
+node_modules/
+obj/
+reference/

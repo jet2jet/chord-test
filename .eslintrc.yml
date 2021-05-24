@@ -1,0 +1,78 @@
+root: true
+plugins:
+  - '@typescript-eslint'
+  - jest
+extends:
+  - standard
+  - 'plugin:@typescript-eslint/recommended'
+  - standard-with-typescript
+  - prettier
+globals:
+  __DEV__: readonly
+  __PROD__: readonly
+rules:
+  # using @typescript-eslint/naming-convention
+  camelcase: off
+  default-case-last: off
+  'import/export': off
+  lines-between-class-members: off
+  no-dupe-class-members: off
+  # using @typescript-eslint/no-useless-constructor instead
+  #no-useless-constructor: off
+  spaced-comment:
+    - error
+    - always
+    - markers: ['/']
+      exceptions: ['/']
+  '@typescript-eslint/adjacent-overload-signatures': error
+  '@typescript-eslint/array-type': [error, { default: 'array-simple' }]
+  '@typescript-eslint/explicit-function-return-type': off
+  '@typescript-eslint/explicit-module-boundary-types': error
+  '@typescript-eslint/lines-between-class-members': off
+  '@typescript-eslint/member-delimiter-style': off
+  '@typescript-eslint/member-ordering':
+    - error
+    - default:
+        - public-static-field
+        - private-static-field
+        - public-instance-field
+        - private-instance-field
+        - public-constructor
+        - private-constructor
+  '@typescript-eslint/naming-convention':
+    - error
+    - selector: default
+      format: ['strictCamelCase', 'UPPER_CASE']
+      filter:
+        regex: '(?:^__?|^[A-G]_[A-Z]\w*$)'
+        match: false
+    - selector: enumMember
+      format: ['StrictPascalCase']
+      filter:
+        regex: '(?:^_(?:[A-Z][a-z0-9]+)*[A-Za-z0-9]?$|^[A-G]_[A-Z]\w*$)'
+        match: false
+    - selector: typeLike
+      format: ['StrictPascalCase']
+  '@typescript-eslint/no-explicit-any': off
+  '@typescript-eslint/no-implicit-any-catch': error
+  '@typescript-eslint/no-inferrable-types': off
+  '@typescript-eslint/no-non-null-assertion': off
+  '@typescript-eslint/no-use-before-define': off
+  '@typescript-eslint/no-useless-constructor': error
+  '@typescript-eslint/no-unused-vars': off
+  '@typescript-eslint/prefer-includes': off
+overrides:
+  - files: ['build/**/*.js']
+    env:
+      node: true
+    rules:
+      '@typescript-eslint/no-var-requires': off
+  - files: ['**/*.ts', '**/*.tsx']
+    parser: '@typescript-eslint/parser'
+    parserOptions:
+      project: ./tsconfig.json
+  - files: ['**/*.spec.js', '**/*.spec.ts']
+    extends:
+      - 'plugin:jest/recommended'
+    globals:
+      'jest/globals': true
