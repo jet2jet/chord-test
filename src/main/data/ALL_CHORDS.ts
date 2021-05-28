@@ -154,7 +154,7 @@ const ALL_CHORDS: readonly ChordListItem[] = [
 			root: NoteType.C,
 			rootSharpFlat: 0,
 			type: ChordType.Major,
-			appends: [ChordAppends.Ninth],
+			appends: [ChordAppends.Add9],
 		},
 		'add9',
 		['add9', 'add2'],
