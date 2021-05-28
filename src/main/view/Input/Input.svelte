@@ -7,6 +7,10 @@
 		parseChordName,
 		parsedChordToChord,
 	} from '../../service/chord';
+	import {
+		getAutoAddSeventhForNinth,
+		listenAutoAddSeventhForNinth,
+	} from '../../service/settings';
 	import type EventDispatcher from '../../utils/EventDispatcher';
 	import {
 		getChordName,
@@ -31,6 +35,7 @@
 	let lastKeys: boolean[] = keys.slice();
 	let lastRoot: NoteType = root;
 
+	let autoAddSevenForNinth: boolean = getAutoAddSeventhForNinth();
 	let value: string = '';
 	let parsedChordName: string | null = '';
 	let noteNames: string[];
@@ -76,7 +81,7 @@
 				} else if (fixedRoot && parsed.root !== root) {
 					parsedChordName = null;
 				} else {
-					chord = parsedChordToChord(parsed);
+					chord = parsedChordToChord(parsed, autoAddSevenForNinth);
 					parsedChordName = getChordName(chord);
 				}
 			} catch {
@@ -109,6 +114,11 @@
 	const labelRootNote = getTextS('label.rootNote');
 	const labelNotes = getTextS('label.notes');
 	const unlisten = resetter.listen(onReset);
+	const unlistenAutoAddSevenForNinth = listenAutoAddSeventhForNinth(
+		(value) => {
+			autoAddSevenForNinth = value;
+		}
+	);
 	onDestroy(() => {
 		labelChordInput.unsubscribe();
 		labelParsedChord.unsubscribe();
@@ -116,6 +126,7 @@
 		labelRootNote.unsubscribe();
 		labelNotes.unsubscribe();
 		unlisten();
+		unlistenAutoAddSevenForNinth();
 	});
 
 </script>

@@ -10,11 +10,14 @@ jest.mock('./parseChordName');
 
 describe('parseInput', () => {
 	const dummyInput: any = { __type: 'Input' };
+	const dummyAutoAddSevenForNinth: any = {
+		__type: 'AutoAddSevenForNinth',
+	};
 
 	it('should return an empty array if parseChordName returns null (meaning no input)', () => {
 		mocked(parseChordName).mockReturnValueOnce(null);
 
-		const r = parseInput(dummyInput);
+		const r = parseInput(dummyInput, dummyAutoAddSevenForNinth);
 
 		expect(r).toEqual([]);
 		expect(parseChordName).toHaveBeenCalledWith(dummyInput);
@@ -29,10 +32,13 @@ describe('parseInput', () => {
 			dummyGetNotesResult
 		);
 
-		const r = parseInput(dummyInput);
+		const r = parseInput(dummyInput, dummyAutoAddSevenForNinth);
 
 		expect(r).toEqual(dummyGetNotesResult);
 		expect(parseChordName).toHaveBeenCalledWith(dummyInput);
-		expect(getNotesFromParsedChord).toHaveBeenCalledWith(dummyParseResult);
+		expect(getNotesFromParsedChord).toHaveBeenCalledWith(
+			dummyParseResult,
+			dummyAutoAddSevenForNinth
+		);
 	});
 });

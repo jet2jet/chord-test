@@ -6,11 +6,15 @@ import reduceDegreesAndRelativeNotes from './reduceDegreesAndRelativeNotes';
 import sortDegreesAndRelativeNotes from './sortDegreesAndRelativeNotes';
 
 export default function getNotesFromParsedChord(
-	data: ParsedChord
+	data: ParsedChord,
+	autoAddSevenForNinth: boolean
 ): DegreeAndRelativeNote[] {
 	return sortDegreesAndRelativeNotes(
 		reduceDegreesAndRelativeNotes(
-			convertTokensToDegreesAndRelativeNotes(data.tokens)
+			convertTokensToDegreesAndRelativeNotes(
+				data.tokens,
+				autoAddSevenForNinth
+			)
 		)
 	);
 }

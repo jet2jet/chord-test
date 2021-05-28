@@ -14,6 +14,9 @@ describe('convertTokensToDegreesAndRelativeNotes', () => {
 		const dummyTokenData2: any = { __type: 'TokenData2' };
 		const dummyTokenData3: any = { __type: 'TokenData3' };
 		const dummyDegreeUsed: any = { __type: 'DegreeUsed' };
+		const dummyAutoAddSevenForNinth: any = {
+			__type: 'AutoAddSevenForNinth',
+		};
 
 		function makeDummyDegreeAndRelativeNote(token: any): any {
 			return { __type: 'DegreeAndRelativeNote', __token: token };
@@ -25,7 +28,10 @@ describe('convertTokensToDegreesAndRelativeNotes', () => {
 		);
 
 		const input = [dummyTokenData1, dummyTokenData2, dummyTokenData3];
-		const r = convertTokensToDegreesAndRelativeNotes(input);
+		const r = convertTokensToDegreesAndRelativeNotes(
+			input,
+			dummyAutoAddSevenForNinth
+		);
 
 		expect(r).toEqual([
 			makeDummyDegreeAndRelativeNote(dummyTokenData1),
@@ -38,15 +44,18 @@ describe('convertTokensToDegreesAndRelativeNotes', () => {
 		);
 		expect(convertTokenToDegreesAndRelativeNotes).toHaveBeenCalledWith(
 			dummyTokenData1,
-			dummyDegreeUsed
+			dummyDegreeUsed,
+			dummyAutoAddSevenForNinth
 		);
 		expect(convertTokenToDegreesAndRelativeNotes).toHaveBeenCalledWith(
 			dummyTokenData2,
-			dummyDegreeUsed
+			dummyDegreeUsed,
+			dummyAutoAddSevenForNinth
 		);
 		expect(convertTokenToDegreesAndRelativeNotes).toHaveBeenCalledWith(
 			dummyTokenData3,
-			dummyDegreeUsed
+			dummyDegreeUsed,
+			dummyAutoAddSevenForNinth
 		);
 	});
 });

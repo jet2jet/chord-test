@@ -5,10 +5,15 @@ import convertTokenToDegreesAndRelativeNotes from './convertTokenToDegreesAndRel
 import makeDegreeUsedMap from './makeDegreeUsedMap';
 
 export default function convertTokensToDegreesAndRelativeNotes(
-	tokens: readonly TokenData[]
+	tokens: readonly TokenData[],
+	autoAddSevenForNinth: boolean
 ): DegreeAndRelativeNote[][] {
 	const degreeUsed = makeDegreeUsedMap(tokens);
 	return tokens.map((token) =>
-		convertTokenToDegreesAndRelativeNotes(token, degreeUsed)
+		convertTokenToDegreesAndRelativeNotes(
+			token,
+			degreeUsed,
+			autoAddSevenForNinth
+		)
 	);
 }

@@ -8,7 +8,8 @@ import degreeTokenToDegreeAndRelativeNote from './degreeTokenToDegreeAndRelative
 
 export default function convertTokenToDegreesAndRelativeNotes(
 	token: TokenData,
-	degreeUsed: Record<number, boolean>
+	degreeUsed: Record<number, boolean>,
+	autoAddSevenForNinth: boolean
 ): DegreeAndRelativeNote[] {
 	const chordData = token.d === undefined ? pickupChordByName(token.t) : null;
 	if (chordData !== null) {
@@ -18,10 +19,18 @@ export default function convertTokenToDegreesAndRelativeNotes(
 			degreeUsed
 		);
 	} else {
-		const r = degreeTokenToDegreeAndRelativeNote(token.t);
-		if (r === null) {
+		const degRel = degreeTokenToDegreeAndRelativeNote(token.t);
+		if (degRel === null) {
 			return [];
 		}
-		return [r];
+		if (token.d === 9 && autoAddSevenForNinth && !degreeUsed[11]) {
+			const degRel7 = degreeTokenToDegreeAndRelativeNote('7');
+			/* istanbul ignore if */
+			if (degRel7 === null) {
+				return [degRel];
+			}
+			return [degRel, degRel7];
+		}
+		return [degRel];
 	}
 }

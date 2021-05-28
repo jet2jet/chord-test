@@ -5,6 +5,7 @@
 	import { getTextS } from '../loc';
 
 	import ModalDialog from '../ModalDialog';
+	import ChordOptions from './ChordOptions';
 	import LanguageSelector from './LanguageSelector';
 	import NoteLanguageSelector from './NoteLanguageSelector';
 	import PlayerSelector from './PlayerSelector';
@@ -26,6 +27,7 @@
 	<p><PlayerSelector /></p>
 	<p><Volume {player} /></p>
 	<p><Question /></p>
+	<p><ChordOptions /></p>
 </ModalDialog>
 
 <style>
