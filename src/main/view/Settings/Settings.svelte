@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 
+	import type { PlayerBase } from '../../service/player';
 	import { getTextS } from '../loc';
 
 	import ModalDialog from '../ModalDialog';
@@ -11,6 +12,7 @@
 	import Volume from './Volume';
 
 	export let ref: HTMLElement;
+	export let player: PlayerBase;
 
 	const title = getTextS('dialog.settings');
 
@@ -22,7 +24,7 @@
 	<p><LanguageSelector /></p>
 	<p><NoteLanguageSelector /></p>
 	<p><PlayerSelector /></p>
-	<p><Volume /></p>
+	<p><Volume {player} /></p>
 	<p><Question /></p>
 </ModalDialog>
 

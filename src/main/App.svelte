@@ -114,7 +114,7 @@
 			<button on:click={start}>{$buttonRetry}</button>
 		</p>
 	{/if}
-	<Settings bind:ref={settingsElement} />
+	<Settings bind:ref={settingsElement} {player} />
 </div>
 
 <style>

@@ -1,8 +1,21 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 
+	import type Chord from '../../../model/Chord';
+	import NoteType from '../../../model/NoteType';
+	import type { PlayerBase } from '../../../service/player';
 	import { getVolume, setVolume } from '../../../service/settings';
 	import { getTextS } from '../../loc';
+	import PlayChord from '../../PlayChord';
+
+	export let player: PlayerBase;
+
+	const chord: Chord = {
+		root: NoteType.C,
+		rootSharpFlat: 0,
+		type: 0,
+		appends: [],
+	};
 
 	let volume: number;
 	let rootVolume: number;
@@ -13,6 +26,7 @@
 
 	const labelVolume = getTextS('label.volume');
 	const labelRootVolume = getTextS('label.rootVolume');
+	const labelPlayTest = getTextS('label.playTest');
 
 	onDestroy(() => {
 		labelVolume.unsubscribe();
@@ -49,10 +63,15 @@
 		<span>{rootVolume}</span>
 	</span>
 </span>
+<span class="volumeTest">
+	{$labelPlayTest}
+	<PlayChord {player} {chord} />
+</span>
 
 <style>
-	.volumeParent {
-		display: inline-block;
+	.volumeParent,
+	.volumeTest {
+		display: block;
 	}
 	.volumeParent .volumeForm {
 		display: block;
@@ -62,6 +81,9 @@
 	}
 	.volumeParent .volumeForm span {
 		vertical-align: middle;
+	}
+	.volumeTest {
+		margin-top: 8px;
 	}
 
 </style>
