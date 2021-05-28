@@ -4,11 +4,13 @@ import ChordAppends from '../../../model/ChordAppends';
 import ChordType from '../../../model/ChordType';
 import validateChordAppends from '../validateChord/validateChordAppends';
 import validateChordType from '../validateChord/validateChordType';
+import adjustForNinthAppend from './adjustForNinthAppend';
 
 import getRandomAppendImpl from './getRandomAppendImpl';
 
 jest.mock('../validateChord/validateChordAppends');
 jest.mock('../validateChord/validateChordType');
+jest.mock('./adjustForNinthAppend');
 
 /* eslint-disable jest/no-conditional-expect */
 
@@ -29,6 +31,10 @@ function testForThrowError(
 			getRandomAppendImpl(level, type, [], dummyGetRandom)
 		).toThrowError(dummyError);
 		expect(dummyGetRandom).toHaveBeenCalled();
+		expect(adjustForNinthAppend).toHaveBeenCalledWith(
+			[appendsFromRandom],
+			appendsFromRandom
+		);
 		expect(validateChordType).toHaveBeenCalledWith(type, [
 			appendsFromRandom,
 		]);
@@ -44,6 +50,10 @@ function testForThrowError(
 			getRandomAppendImpl(level, type, [], dummyGetRandom)
 		).toThrowError(dummyError);
 		expect(dummyGetRandom).toHaveBeenCalled();
+		expect(adjustForNinthAppend).toHaveBeenCalledWith(
+			[appendsFromRandom],
+			appendsFromRandom
+		);
 		expect(validateChordAppends).toHaveBeenCalledWith([appendsFromRandom]);
 	});
 }
@@ -58,8 +68,9 @@ function testForSus4Chord(level: number) {
 
 			expect(
 				getRandomAppendImpl(level, ChordType.Sus4, [], dummyGetRandom)
-			).toBe(ChordAppends.None);
+			).toEqual([ChordAppends.None]);
 			expect(dummyGetRandom).not.toHaveBeenCalled();
+			expect(adjustForNinthAppend).not.toHaveBeenCalled();
 			expect(validateChordAppends).not.toHaveBeenCalled();
 			expect(validateChordType).not.toHaveBeenCalled();
 		});
@@ -86,12 +97,17 @@ function testForSus4Chord(level: number) {
 						[],
 						dummyGetRandom
 					)
-				).toBe(appends);
+				).toEqual([appends]);
 				expect(dummyGetRandom).toHaveBeenCalledWith();
 				if (appends === ChordAppends.None) {
+					expect(adjustForNinthAppend).not.toHaveBeenCalled();
 					expect(validateChordAppends).not.toHaveBeenCalled();
 					expect(validateChordType).not.toHaveBeenCalled();
 				} else {
+					expect(adjustForNinthAppend).toHaveBeenCalledWith(
+						[appends],
+						appends
+					);
 					expect(
 						validateChordType
 					).toHaveBeenCalledWith(ChordType.Sus4, [appends]);
@@ -125,12 +141,17 @@ function testForSus4Chord(level: number) {
 						[],
 						dummyGetRandom
 					)
-				).toBe(appends);
+				).toEqual([appends]);
 				expect(dummyGetRandom).toHaveBeenCalledWith();
 				if (appends === ChordAppends.None) {
+					expect(adjustForNinthAppend).not.toHaveBeenCalled();
 					expect(validateChordAppends).not.toHaveBeenCalled();
 					expect(validateChordType).not.toHaveBeenCalled();
 				} else {
+					expect(adjustForNinthAppend).toHaveBeenCalledWith(
+						[appends],
+						appends
+					);
 					expect(
 						validateChordType
 					).toHaveBeenCalledWith(ChordType.Sus4, [appends]);
@@ -150,8 +171,9 @@ function testForSus4Chord(level: number) {
 				[ChordAppends.Seventh],
 				dummyGetRandom
 			)
-		).toBe(ChordAppends.None);
+		).toEqual([ChordAppends.None]);
 		expect(dummyGetRandom).not.toHaveBeenCalled();
+		expect(adjustForNinthAppend).not.toHaveBeenCalled();
 		expect(validateChordAppends).not.toHaveBeenCalled();
 		expect(validateChordType).not.toHaveBeenCalled();
 	});
@@ -173,11 +195,12 @@ function testForDimAugPowerChords(level: number) {
 			ChordType.Augment,
 			ChordType.Power,
 		]) {
-			expect(getRandomAppendImpl(level, type, [], dummyGetRandom)).toBe(
-				ChordAppends.None
-			);
+			expect(
+				getRandomAppendImpl(level, type, [], dummyGetRandom)
+			).toEqual([ChordAppends.None]);
 		}
 		expect(dummyGetRandom).not.toHaveBeenCalled();
+		expect(adjustForNinthAppend).not.toHaveBeenCalled();
 		expect(validateChordAppends).not.toHaveBeenCalled();
 		expect(validateChordType).not.toHaveBeenCalled();
 	});
@@ -204,16 +227,60 @@ function testForNormalChords(level: number, type: ChordType) {
 			mocked(validateChordType).mockClear().mockReturnValue(undefined);
 			mocked(validateChordAppends).mockClear().mockReturnValue(undefined);
 
-			expect(getRandomAppendImpl(level, type, [], dummyGetRandom)).toBe(
-				append
-			);
+			expect(
+				getRandomAppendImpl(level, type, [], dummyGetRandom)
+			).toEqual([append]);
 
 			if (append === ChordAppends.None) {
+				expect(adjustForNinthAppend).not.toHaveBeenCalled();
 				expect(validateChordAppends).not.toHaveBeenCalled();
 				expect(validateChordType).not.toHaveBeenCalled();
 			} else {
+				expect(adjustForNinthAppend).toHaveBeenCalledWith(
+					[append],
+					append
+				);
 				expect(validateChordType).toHaveBeenCalledWith(type, [append]);
 				expect(validateChordAppends).toHaveBeenCalledWith([append]);
+			}
+		}
+	);
+	it.each(testAppends)(
+		"should return adjustForNinthAppend's value if it returns non-null (append = %s)",
+		(append) => {
+			const dummyAppend2: any = { __type: 'Append2' };
+			const dummyGetRandom = jest.fn(() => 0);
+			dummyGetRandom
+				.mockClear()
+				.mockReturnValue((append + 1 / (max * 2)) / max);
+			mocked(adjustForNinthAppend).mockImplementationOnce((target) => {
+				target.push(dummyAppend2);
+				return dummyAppend2;
+			});
+			mocked(validateChordType).mockClear().mockReturnValue(undefined);
+			mocked(validateChordAppends).mockClear().mockReturnValue(undefined);
+
+			const r = getRandomAppendImpl(level, type, [], dummyGetRandom);
+
+			if (append === ChordAppends.None) {
+				expect(r).toEqual([append]);
+				expect(adjustForNinthAppend).not.toHaveBeenCalled();
+				expect(validateChordAppends).not.toHaveBeenCalled();
+				expect(validateChordType).not.toHaveBeenCalled();
+			} else {
+				expect(r).toEqual([append, dummyAppend2]);
+				expect(adjustForNinthAppend).toHaveBeenCalledWith(
+					[append, dummyAppend2],
+					append
+				);
+				expect(validateChordType).toHaveBeenCalledWith(type, [
+					append,
+					dummyAppend2,
+				]);
+				expect(validateChordAppends).toHaveBeenCalledWith([
+					append,
+					dummyAppend2,
+				]);
 			}
 		}
 	);
@@ -230,6 +297,12 @@ const normalChords = [ChordType.Major, ChordType.Minor] as const;
 describe('getRandomAppendImpl', () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
+		mocked(adjustForNinthAppend)
+			.mockClear()
+			.mockImplementation(() => {
+				// do nothing
+				return null;
+			});
 	});
 	describe('level 0', () => {
 		it('should always return None', () => {
@@ -237,8 +310,9 @@ describe('getRandomAppendImpl', () => {
 
 			expect(
 				getRandomAppendImpl(0, ChordType.Major, [], dummyGetRandom)
-			).toBe(ChordAppends.None);
+			).toEqual([ChordAppends.None]);
 			expect(dummyGetRandom).not.toHaveBeenCalled();
+			expect(adjustForNinthAppend).not.toHaveBeenCalled();
 			expect(validateChordAppends).not.toHaveBeenCalled();
 			expect(validateChordType).not.toHaveBeenCalled();
 		});

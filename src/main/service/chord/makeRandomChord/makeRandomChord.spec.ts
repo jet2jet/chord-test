@@ -39,9 +39,9 @@ describe('makeRandomChord', () => {
 				][2] = mockedGetRandomAppend.mock.calls[calls][2].slice();
 				++calls;
 				if (calls > appendCount) {
-					return ChordAppends.None;
+					return [ChordAppends.None];
 				}
-				return calls as ChordAppends;
+				return [calls as ChordAppends];
 			});
 			const expectedAppends = [...Array(appendCount)].map(
 				(_, j) => (j + 1) as ChordAppends

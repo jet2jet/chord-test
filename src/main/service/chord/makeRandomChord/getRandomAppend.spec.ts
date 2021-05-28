@@ -17,14 +17,14 @@ describe('getRandomAppend', () => {
 	it('should return None if level is zero', () => {
 		expect(
 			getRandomAppend(0, dummyChordType, dummyPrevAppends, dummyGetRandom)
-		).toBe(ChordAppends.None);
+		).toEqual([ChordAppends.None]);
 		expect(getRandomAppendImpl).not.toHaveBeenCalled();
 	});
 	it("should return getRandomAppendImpl's result", () => {
-		mocked(getRandomAppendImpl).mockReturnValue(dummyChordAppends);
+		mocked(getRandomAppendImpl).mockReturnValue([dummyChordAppends]);
 		expect(
 			getRandomAppend(1, dummyChordType, dummyPrevAppends, dummyGetRandom)
-		).toBe(dummyChordAppends);
+		).toEqual([dummyChordAppends]);
 		expect(getRandomAppendImpl).toHaveBeenCalledWith(
 			1,
 			dummyChordType,
@@ -44,7 +44,7 @@ describe('getRandomAppend', () => {
 					if (calls < countOfSuccess) {
 						throw dummyError;
 					}
-					return dummyChordAppends;
+					return [dummyChordAppends];
 				});
 			expect(
 				getRandomAppend(
@@ -53,7 +53,7 @@ describe('getRandomAppend', () => {
 					dummyPrevAppends,
 					dummyGetRandom
 				)
-			).toBe(dummyChordAppends);
+			).toEqual([dummyChordAppends]);
 			expect(getRandomAppendImpl).toHaveBeenCalledTimes(countOfSuccess);
 			expect(getRandomAppendImpl).toHaveBeenCalledWith(
 				1,
@@ -70,7 +70,7 @@ describe('getRandomAppend', () => {
 		});
 		expect(
 			getRandomAppend(1, dummyChordType, dummyPrevAppends, dummyGetRandom)
-		).toBe(ChordAppends.None);
+		).toEqual([ChordAppends.None]);
 		expect(getRandomAppendImpl).toHaveBeenCalledTimes(3);
 		expect(getRandomAppendImpl).toHaveBeenCalledWith(
 			1,

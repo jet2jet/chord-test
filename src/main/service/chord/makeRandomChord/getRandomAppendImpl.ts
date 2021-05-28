@@ -2,20 +2,21 @@ import ChordAppends from '../../../model/ChordAppends';
 import ChordType from '../../../model/ChordType';
 import validateChordAppends from '../validateChord/validateChordAppends';
 import validateChordType from '../validateChord/validateChordType';
+import adjustForNinthAppend from './adjustForNinthAppend';
 
 export default function getRandomAppendImpl(
 	level: number,
 	type: ChordType,
 	prevAppends: readonly ChordAppends[],
 	getRandom: () => number
-): ChordAppends {
+): ChordAppends[] {
 	if (level === 0) {
-		return ChordAppends.None;
+		return [ChordAppends.None];
 	}
 	let appends: ChordAppends;
 	if (type === ChordType.Sus4) {
 		if (prevAppends.length === 1) {
-			return ChordAppends.None;
+			return [ChordAppends.None];
 		}
 		switch (Math.floor(getRandom() * (level === 3 ? 3 : 2))) {
 			case 0:
@@ -68,12 +69,13 @@ export default function getRandomAppendImpl(
 		}
 	}
 	if (appends === ChordAppends.None) {
-		return ChordAppends.None;
+		return [ChordAppends.None];
 	}
 
 	const testAppends = prevAppends.concat(appends);
+	const addedAppends = adjustForNinthAppend(testAppends, appends);
 	// if validation is OK, no error is thrown
 	validateChordType(type, testAppends);
 	validateChordAppends(testAppends);
-	return appends;
+	return addedAppends !== null ? [appends, addedAppends] : [appends];
 }

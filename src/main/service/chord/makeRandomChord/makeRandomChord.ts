@@ -13,10 +13,10 @@ export default function makeRandomChord(
 	const appends: ChordAppends[] = [];
 	while (true) {
 		const append = getRandomAppend(level, type, appends, getRandom);
-		if (append === ChordAppends.None) {
+		if (append[0] === ChordAppends.None) {
 			break;
 		}
-		appends.push(append);
+		appends.push(...append);
 	}
 	appends.sort((a, b) => a - b);
 	return { root, rootSharpFlat, type, appends };

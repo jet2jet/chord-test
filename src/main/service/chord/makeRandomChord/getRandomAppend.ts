@@ -7,9 +7,9 @@ export default function getRandomAppend(
 	type: ChordType,
 	prevAppends: readonly ChordAppends[],
 	getRandom: () => number
-): ChordAppends {
+): ChordAppends[] {
 	if (level === 0) {
-		return ChordAppends.None;
+		return [ChordAppends.None];
 	}
 	let tryCount = 1;
 	while (tryCount <= 3) {
@@ -20,5 +20,5 @@ export default function getRandomAppend(
 		}
 		++tryCount;
 	}
-	return ChordAppends.None;
+	return [ChordAppends.None];
 }
