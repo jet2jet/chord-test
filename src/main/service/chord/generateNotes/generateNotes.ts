@@ -27,7 +27,7 @@ export default function generateNotes(
 	}
 	const root = chord.root;
 	const typeMeta = chordTypeToMeta(chord.type);
-	const appendsMeta = chordAppendsToMeta(chord.appends);
+	const appendsMeta = chordAppendsToMeta(typeMeta, chord.appends);
 	const typeRelNotes = chordTypeToRelativeNotes(chord.type);
 	const [addNotes, removeNotes] = applyChordAppends(
 		typeRelNotes,

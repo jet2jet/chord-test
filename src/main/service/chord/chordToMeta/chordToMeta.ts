@@ -8,7 +8,7 @@ import chordTypeToMeta from './chordTypeToMeta';
 export default function chordToMeta(
 	chord: ReadonlyRecursive<Chord>
 ): ChordMeta[] {
-	return [ChordMeta.Root]
-		.concat(chordTypeToMeta(chord.type))
-		.concat(chordAppendsToMeta(chord.appends));
+	const typeMeta = chordTypeToMeta(chord.type);
+	const appendMeta = chordAppendsToMeta(typeMeta, chord.appends);
+	return [ChordMeta.Root].concat(typeMeta).concat(appendMeta);
 }

@@ -36,6 +36,9 @@ describe('chordToMeta', () => {
 			})
 		).toEqual([ChordMeta.Root, dummyTypeMeta, dummyAppendsMeta]);
 		expect(chordTypeToMeta).toBeCalledWith(dummyChordType);
-		expect(chordAppendsToMeta).toBeCalledWith(dummyAppends);
+		expect(chordAppendsToMeta).toBeCalledWith(
+			[dummyTypeMeta],
+			dummyAppends
+		);
 	});
 });
