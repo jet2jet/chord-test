@@ -83,6 +83,11 @@ module.exports = (env) => {
 						{
 							loader: 'ts-loader',
 							options: {
+								configFile: path.resolve(
+									__dirname,
+									'..',
+									'tsconfig.app.json'
+								),
 								compilerOptions: {
 									declaration: false,
 								},
