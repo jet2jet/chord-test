@@ -21,6 +21,7 @@
 	let elemShareTextField: HTMLInputElement | undefined;
 	let copied: boolean = false;
 	let copiedTimer: ReturnType<typeof setTimeout> | null = null;
+	const shareAvailable: boolean = typeof navigator.share !== 'undefined';
 
 	$: totalScore = scores.reduce(
 		(prev, score) => prev + score / scores.length,
@@ -61,8 +62,19 @@
 		}, 5000);
 	}
 
+	function doShare() {
+		if (typeof navigator.share === 'undefined') {
+			return;
+		}
+		void navigator.share({
+			title: document.title,
+			text: theShareText,
+		});
+	}
+
 	const buttonAnswer = getTextS('button.answer');
 	const buttonCopy = getTextS('button.copy');
+	const buttonShare = getTextS('button.share');
 	const labelScore = getTextS('label.score');
 	const labelChangedScore = getTextS('label.changedScore');
 	const labelShareText = getTextS('label.shareText');
@@ -71,11 +83,14 @@
 	const unlisten = resetter.listen(onReset);
 	onDestroy(() => {
 		buttonAnswer.unsubscribe();
+		buttonCopy.unsubscribe();
+		buttonShare.unsubscribe();
 		labelScore.unsubscribe();
 		labelChangedScore.unsubscribe();
+		labelShareText.unsubscribe();
+		messageCopied.unsubscribe();
 		unlisten();
 	});
-
 </script>
 
 <div
@@ -166,8 +181,12 @@
 					readonly={true}
 					value={theShareText}
 					bind:this={elemShareTextField}
-				/><button on:click={doCopy}>{$buttonCopy}</button
-				>{#if copied}<br />{$messageCopied}{/if}
+				/>
+				{#if shareAvailable}
+					<button on:click={doShare}>{$buttonShare}</button>
+				{/if}
+				<button on:click={doCopy}>{$buttonCopy}</button>
+				{#if copied}<br />{$messageCopied}{/if}
 			</p>
 		</section>
 	{/if}
@@ -226,5 +245,4 @@
 		font-size: 1rem;
 		color: #888;
 	}
-
 </style>
