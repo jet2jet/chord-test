@@ -67,7 +67,7 @@
 			return;
 		}
 		void navigator.share({
-			title: document.title,
+			title: '',
 			text: theShareText,
 		});
 	}
